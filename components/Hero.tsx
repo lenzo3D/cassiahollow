@@ -96,9 +96,9 @@ export default function Hero() {
         {/* Title lower-left over the planting. Name, one line, two facts — nothing else. */}
         <div ref={copyRef} className="absolute inset-x-0 bottom-0 px-[6vw] pb-[8vh] max-md:pb-[12vh]" style={{ opacity: 0 }}>
           <h1 className="font-serif text-[clamp(2.75rem,5.5vw,5.5rem)] uppercase leading-[0.94] tracking-[0.02em] text-foreground">
-            Hidden
+            Cassia
             <br />
-            Foliage
+            Hollow
           </h1>
           <p className="mt-5 font-serif text-[clamp(1.125rem,1.5vw,1.5rem)] italic leading-snug text-foreground/95">
             A private expression of tropical living.

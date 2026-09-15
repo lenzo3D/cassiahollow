@@ -6,7 +6,7 @@
 // (large, as the site opened), the address, and the one practical thing a
 // visitor might want to do next — ask to see the house. Then the small print.
 //
-//   1  wordmark: HIDDEN / FOLIAGE, then BELMONT ROAD · SINGAPORE, and the
+//   1  wordmark: CASSIA / HOLLOW, then BELMONT ROAD · SINGAPORE, and the
 //      schedule in one line (the facts a buyer wants beside the enquiry)
 //   2  enquiry (#enquire): ENQUIRE — "Private viewings by appointment." —
 //      WhatsApp link, and a short form (name, email, telephone, message) that
@@ -109,12 +109,12 @@ export default function Signature() {
         >
           <span className="block overflow-hidden">
             <span data-line className="block">
-              Hidden
+              Cassia
             </span>
           </span>
           <span className="block overflow-hidden">
             <span data-line className="block">
-              Foliage
+              Hollow
             </span>
           </span>
         </h2>
