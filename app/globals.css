@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+/* Site-wide colour variables. Change these and the whole site follows. */
+:root {
+  --background: #070b08; /* very dark forest, near black */
+  --foreground: #ebe9e2; /* warm ivory for primary text */
+  --stone: #b8b2a4; /* muted stone for small secondary text */
+}
+
+/* Makes the variables above usable as Tailwind classes,
+   e.g. bg-background, text-foreground, text-stone, font-serif, font-sans */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-stone: var(--stone);
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Keyboard focus: a thin ivory rule, offset from the element, in place of the
+   browser's default ring — visible on the dark field, quiet everywhere else. */
+:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--foreground) 80%, transparent);
+  outline-offset: 4px;
+}
+
+/* Bodoni's hairlines look best with optical sizing left on (the default),
+   and rendered with the browser's high-quality text smoothing. */
+.font-serif {
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+/* Windows High Contrast / forced-colours mode strips text shadows and recolours
+   text, so give the hero copy a solid backing there to keep it readable. */
+@media (forced-colors: active) {
+  .hero-copy {
+    background: Canvas;
+    color: CanvasText;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Enquiry form: browsers paint autofilled fields pale yellow/white, which
+   would flash on the dark field. Keep them dark, ivory text. */
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  box-shadow: 0 0 0 1000px var(--background) inset;
+  caret-color: var(--foreground);
+}
+
+/* Four Levels: room labels are too small to read on phones; the level names and
+   captions carry the information there. */
+@media (max-width: 767px) {
+  .four-levels .plan-room-label {
+    display: none;
+  }
+}
+
+/* Four Levels on portrait tablets: the phone layout (drawing above, caption
+   beneath) to go with the phone projection FourLevels.tsx chooses there. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .four-levels .plan-room-label {
+    display: none;
+  }
+  .four-levels .fl-drawing {
+    inset: 6vh 0 44vh 0;
+    width: auto;
+  }
+  .four-levels .fl-captions {
+    inset: 57vh 6vw auto 6vw;
+    width: auto;
+  }
+  .four-levels .fl-cap {
+    inset: 0 0 auto 0;
+  }
+}
+
+/* Four Levels, reduced motion: no pin — a static exploded drawing with all four
+   captions listed beneath. Unlayered on purpose so it wins over the utilities. */
+@media (prefers-reduced-motion: reduce) {
+  .four-levels {
+    height: auto;
+    padding: 12vh 0 10vh;
+  }
+  .four-levels .fl-stage {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  .four-levels .fl-drawing {
+    position: relative;
+    inset: auto;
+    width: min(92vw, 1100px);
+    height: 58vh;
+    margin: 0 auto;
+  }
+  .four-levels .fl-captions {
+    position: relative;
+    inset: auto;
+    transform: none;
+    width: min(92vw, 1100px);
+    margin: 3rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem 3rem;
+  }
+  .four-levels .fl-cap {
+    position: relative;
+    inset: auto;
+    opacity: 1 !important;
+  }
+  .four-levels .fl-label {
+    position: relative;
+    inset: auto;
+    width: min(92vw, 1100px);
+    margin: 3rem auto 0;
+  }
+}
+
+/* ── Virtual tour ──────────────────────────────────────────────────────── */
+/* Doorway hotspots inside the panorama: an ivory ring that breathes, with a
+   small tracked label beneath — the site's annotation register, in-scene. */
+.tour-hotspot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 44px;
+  height: 56px;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.tour-hotspot-ring {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(235, 233, 226, 0.9);
+  background: rgba(7, 11, 8, 0.35);
+  box-shadow: 0 0 0 0 rgba(235, 233, 226, 0.35);
+  animation: tour-pulse 2.6s ease-out infinite;
+}
+.tour-hotspot-label {
+  font-family: var(--font-sans, ui-sans-serif);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ebe9e2;
+  text-shadow: 0 1px 8px rgba(7, 11, 8, 0.8);
+  white-space: nowrap;
+}
+.tour-marker {
+  box-shadow: 0 0 0 0 rgba(235, 233, 226, 0.3);
+  animation: tour-pulse 2.6s ease-out infinite;
+}
+@keyframes tour-pulse {
+  to {
+    box-shadow: 0 0 0 12px rgba(235, 233, 226, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-hotspot-ring,
+  .tour-marker {
+    animation: none;
+  }
+}
+
+/* Walk arrows: a disc on the floor with a chevron, label beneath (PanoViewer). */
+.tour-walk {
+  width: 64px;
+  height: 84px;
+  margin: -42px 0 0 -32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.tour-walk-disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  border: 1px solid rgb(240 236 228 / 0.85);
+  background: rgb(7 11 8 / 0.35);
+  color: rgb(240 236 228 / 0.95);
+  transform: perspective(200px) rotateX(48deg);
+  transition: transform 0.4s ease, background 0.4s ease;
+}
+.tour-walk:hover .tour-walk-disc {
+  background: rgb(240 236 228 / 0.25);
+  transform: perspective(200px) rotateX(48deg) scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-walk-disc {
+    transition: none;
+  }
+}
+
+/* Keep tour annotations legible over pale stone and sunlit glazing. */
+.tour-overlay { text-shadow: 0 1px 4px rgb(0 0 0 / 0.9), 0 0 12px rgb(0 0 0 / 0.5); }
+.tour-walk:focus-visible .tour-walk-disc { outline: 2px solid currentColor; outline-offset: 5px; }
+.tour-overlay button:disabled { cursor: default; }
